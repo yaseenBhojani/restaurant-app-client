@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { ChangeOrderStatus, Order } from '../types/interfaces';
 
-const BASE_URL = 'http://localhost:3333';
+const BASE_URL = 'https://restaurant-app-server.up.railway.app/';
 
 export const createOrderHandler = async (checkoutData: Order) => {
   try {
-    const response = await axios.post(`${BASE_URL}/order`, checkoutData, {
+    const response = await axios.post(`${BASE_URL}order`, checkoutData, {
       headers: {
         authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         'x-refresh-token': localStorage.getItem('refreshToken'),
@@ -19,7 +19,7 @@ export const createOrderHandler = async (checkoutData: Order) => {
 
 export const getOrdersHandler = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/order/user/email`, {
+    const response = await axios.get(`${BASE_URL}order/user/email`, {
       headers: {
         authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         'x-refresh-token': localStorage.getItem('refreshToken'),
@@ -33,7 +33,7 @@ export const getOrdersHandler = async () => {
 
 export const getAllOrdersHandler = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/order`, {
+    const response = await axios.get(`${BASE_URL}order`, {
       headers: {
         authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         'x-refresh-token': localStorage.getItem('refreshToken'),
@@ -51,7 +51,7 @@ export const changeOrderStatusHandler = async ({
 }: ChangeOrderStatus) => {
   try {
     const response = await axios.patch(
-      `${BASE_URL}/order/${id}/status`,
+      `${BASE_URL}order/${id}/status`,
       { status },
       {
         headers: {

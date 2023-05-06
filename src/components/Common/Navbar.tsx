@@ -160,15 +160,17 @@ const ResponsiveAppBar = () => {
             ))}
           </Box>
 
-          <IconButton
-            aria-label="cart"
-            sx={{ color: '#fff', mr: 2 }}
-            onClick={() => navigate('/cart')}
-          >
-            <StyledBadge badgeContent={totalQuantity} color="primary">
-              <ShoppingCartIcon />
-            </StyledBadge>
-          </IconButton>
+          {role === 'ADMIN' && (
+            <IconButton
+              aria-label="cart"
+              sx={{ color: '#fff', mr: 2 }}
+              onClick={() => navigate('/cart')}
+            >
+              <StyledBadge badgeContent={totalQuantity} color="primary">
+                <ShoppingCartIcon />
+              </StyledBadge>
+            </IconButton>
+          )}
           {!isAuthenticated ? (
             <Button sx={{ color: '#fff' }} onClick={() => navigate('/login')}>
               Login

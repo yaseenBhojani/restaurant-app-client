@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { FoodItem } from '../types/interfaces';
 
-const BASE_URL = 'http://localhost:3333';
+const BASE_URL = 'https://restaurant-app-server.up.railway.app/';
 
 export const createFood = async (food: FoodItem) => {
   try {
-    const response = await axios.post(`${BASE_URL}/food`, food, {
+    const response = await axios.post(`${BASE_URL}food`, food, {
       headers: {
         authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         'x-refresh-token': localStorage.getItem('refreshToken'),
@@ -19,7 +19,7 @@ export const createFood = async (food: FoodItem) => {
 
 export const getFoods = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/food`);
+    const response = await axios.get(`${BASE_URL}food`);
     console.log(response);
     return response.data;
   } catch (error: any) {
