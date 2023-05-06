@@ -1,0 +1,49 @@
+import { CheckoutState } from '../types/interfaces';
+
+export const validateCheckoutFields = (checkoutData: CheckoutState) => {
+  const errors: { [key: string]: string } = {};
+
+  if (!checkoutData.shippingAddress.email) {
+    errors.email = 'Email is required';
+  } else if (!/\S+@\S+\.\S+/.test(checkoutData.shippingAddress.email)) {
+    errors.email = 'Email is invalid';
+  }
+
+  if (!checkoutData.shippingAddress.address) {
+    errors.address = 'Address is required';
+  }
+
+  if (!checkoutData.shippingAddress.city) {
+    errors.city = 'City is required';
+  }
+
+  if (!checkoutData.shippingAddress.zip) {
+    errors.zip = 'ZIP code is required';
+  } else if (!/^\d{5}(?:[-\s]\d{4})?$/.test(checkoutData.shippingAddress.zip)) {
+    errors.zip = 'ZIP code is invalid';
+  }
+
+  if (!checkoutData.shippingAddress.country) {
+    errors.country = 'Country is required';
+  }
+
+  if (!checkoutData.paymentMethod.cardName) {
+    errors.cardName = 'Name on card is required';
+  }
+
+  if (!checkoutData.paymentMethod.cardNumber) {
+    errors.cardNumber = 'Card number is required';
+  } else if (!/^\d+$/.test(checkoutData.paymentMethod.cardNumber)) {
+    errors.cardNumber = 'Card number must be a number';
+  }
+
+  if (!checkoutData.paymentMethod.expDate) {
+    errors.expDate = 'Expiration date is required';
+  }
+
+  if (!checkoutData.paymentMethod.cvv) {
+    errors.cvv = 'CVV is required';
+  }
+
+  return errors;
+};
