@@ -19,8 +19,6 @@ import logo from '../../assets/images/logo.png';
 import { AppDispatch, RootState } from '../../store';
 import { logout } from '../../store/reducers/authReducer';
 
-const isUser = true;
-
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }: { theme: any }) => ({
   '& .MuiBadge-badge': {
     right: -3,
@@ -72,7 +70,7 @@ const ResponsiveAppBar = () => {
         navigate('/cart');
         break;
       case 'ORDERS':
-        isUser ? navigate('/orders') : navigate('/admin');
+        role === 'USER' ? navigate('/orders') : navigate('/admin');
         break;
       case 'CREATE FOOD':
         navigate('/admin/create-food');
