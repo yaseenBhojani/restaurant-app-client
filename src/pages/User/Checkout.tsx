@@ -17,6 +17,7 @@ import { validateCheckoutFields } from '../../utils/checkoutFieldsValidator';
 import { Fragment, useState } from 'react';
 import { createOrder } from '../../store/reducers/checkoutReducer';
 import { resetCart } from '../../store/reducers/cartReducer';
+import axios from 'axios';
 
 const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
@@ -43,51 +44,47 @@ export default function Checkout() {
   const { items, totalPrice } = useSelector((state: RootState) => state.cart);
   const [error, setError] = useState('');
 
-  const checkoutHandler = () => {
+  const checkoutHandler = async () => {
     const errors = validateCheckoutFields({ paymentMethod, shippingAddress });
 
-    if (items.length === 0) {
-      return setError('Your cart is empty');
-    }
+    if (items.length === 0) return setError('Your cart is empty');
 
-    if (!isAuthenticated) {
-      return setError('You must be logged in to checkout');
-    }
+    if (!isAuthenticated) return setError('You must be logged in to checkout');
 
     if (Object.keys(errors).length !== 0) {
       return setError(errors[Object.keys(errors)[0]]);
     }
 
-    dispatch(
-      createOrder({
-        items,
-        address: shippingAddress.address,
-        cardName: paymentMethod.cardName,
-        cardNumber: +paymentMethod.cardNumber,
-        cvv: paymentMethod.cvv,
-        city: shippingAddress.city,
-        country: shippingAddress.country,
-        email: shippingAddress.email,
-        zipCode: +shippingAddress.zip,
-        totalAmount: +totalPrice,
-      })
-    )
-      .unwrap()
-      .then(() => {
-        setError('');
-        setActiveStep(activeStep + 1);
-        dispatch(resetCart());
-      })
-      .catch((error: any) => setError(error.message));
+    try {
+      await dispatch(
+        createOrder({
+          items,
+          address: shippingAddress.address,
+          cardName: paymentMethod.cardName,
+          cardNumber: +paymentMethod.cardNumber,
+          cvv: paymentMethod.cvv,
+          city: shippingAddress.city,
+          country: shippingAddress.country,
+          email: shippingAddress.email,
+          zipCode: +shippingAddress.zip,
+          totalAmount: +totalPrice,
+        })
+      ).unwrap();
+
+      setError('');
+      setActiveStep(activeStep + 1);
+      dispatch(resetCart());
+    } catch (error) {
+      setError(
+        axios.isAxiosError(error)
+          ? error.response?.data?.message ?? 'An error occurred'
+          : 'An error occurred'
+      );
+    }
   };
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
+  const handleNext = () => setActiveStep(activeStep + 1);
+  const handleBack = () => setActiveStep(activeStep - 1);
 
   return (
     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>

@@ -1,78 +1,125 @@
+import { useDispatch, useSelector } from 'react-redux';
+
+import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { useDispatch, useSelector } from 'react-redux';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import DeleteIcon from '@mui/icons-material/Delete';
+
+import { AddShoppingCart, Delete } from '@mui/icons-material';
 
 import { AppDispatch, RootState } from '../../store';
 import { FoodItem } from '../../types/interfaces';
 import { addItem, removeItem } from '../../store/reducers/cartReducer';
-import { IconButton } from '@mui/material';
 
-export default function FoodCard({
+const FoodCardWrapper = styled(Card)({
+  width: 345,
+  margin: '0 auto',
+  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+  '&:hover': {
+    transform: 'scale(1.05)',
+    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+  },
+});
+
+const FoodCardImage = styled(CardMedia)({
+  height: 0,
+  paddingTop: '56.25%', // 16:9 aspect ratio
+});
+
+const FoodCardTitle = styled(Typography)({
+  fontWeight: 'bold',
+  fontSize: '1.25rem',
+  marginBottom: '0.5rem',
+});
+
+const FoodCardDescription = styled(Typography)({
+  fontSize: '1rem',
+  color: 'text.secondary',
+  marginBottom: '1rem',
+});
+
+const FoodCardPrice = styled(Typography)({
+  fontWeight: 'bold',
+  fontSize: '1.25rem',
+  color: 'text.primary',
+  marginBottom: '0.5rem',
+});
+
+const FoodCardCategory = styled(Typography)({
+  fontSize: '1rem',
+  color: 'text.secondary',
+  marginBottom: '1rem',
+});
+
+const AddToCartButton = styled(IconButton)({
+  backgroundColor: '#fe7f32',
+  color: '#fff',
+  transition: 'background-color 0.3s ease-out',
+  '&:hover': {
+    backgroundColor: '#181f2e',
+  },
+});
+
+const RemoveFromCartButton = styled(IconButton)({
+  color: '#ff0000',
+  '&:hover': {
+    color: '#D32F2F',
+  },
+});
+
+const FoodCard = ({
   _id,
   name,
   description,
   price,
   image,
   category,
-}: FoodItem) {
+}: FoodItem) => {
   const dispatch = useDispatch<AppDispatch>();
   const { items } = useSelector((state: RootState) => state.cart);
 
-  const addToCartHandler = () => {
+  const handleAddToCart = () => {
     dispatch(addItem({ _id, name, description, price, image, category }));
   };
 
-  const removeToCartHandler = () => {
+  const handleRemoveFromCart = () => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dispatch(removeItem(_id!));
   };
 
+  const isInCart = items.some(item => item._id === _id);
+
   return (
-    <Card
-      sx={{
-        width: 345,
-      }}
-    >
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          src={image}
-          alt={name}
-          sx={{
-            objectFit: 'cover',
-            borderRadius: '1rem',
-          }}
-          loading="lazy"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
-          <Typography variant="h6" color="text.primary" sx={{ mt: 1 }}>
-            ${price}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        {!items.some(item => item._id === _id) ? (
-          <IconButton onClick={addToCartHandler} color="primary">
-            <AddShoppingCartIcon />
-          </IconButton>
+    <FoodCardWrapper>
+      <FoodCardImage image={image} />
+      <CardContent>
+        <FoodCardTitle variant="h5">{name}</FoodCardTitle>
+        <FoodCardDescription variant="body1">{description}</FoodCardDescription>
+        <FoodCardPrice variant="h6">${price}</FoodCardPrice>
+        <FoodCardCategory variant="body2">
+          Category: {category}
+        </FoodCardCategory>
+      </CardContent>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
+        {!isInCart ? (
+          <AddToCartButton aria-label="add to cart" onClick={handleAddToCart}>
+            <AddShoppingCart />
+          </AddToCartButton>
         ) : (
-          <IconButton onClick={removeToCartHandler} color="primary">
-            <DeleteIcon />
-          </IconButton>
+          <RemoveFromCartButton
+            aria-label="remove from cart"
+            onClick={handleRemoveFromCart}
+          >
+            <Delete />
+          </RemoveFromCartButton>
         )}
       </CardActions>
-    </Card>
+    </FoodCardWrapper>
   );
-}
+};
+
+export default FoodCard;

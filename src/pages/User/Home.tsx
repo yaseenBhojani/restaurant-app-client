@@ -6,7 +6,8 @@ import { styled } from '@mui/system';
 import Heading from '../../components/Common/Heading';
 import ImageGallery from '../../components/User/ImageGallery';
 import Pricing from '../../components/User/Pricing';
-import img from '../../assets/images/img1.jpg';
+
+import LocalDiningIcon from '@mui/icons-material/LocalDining';
 
 const Description = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -40,7 +41,7 @@ const descriptionTextStyles = {
     width: '70px',
     height: '2px',
     margin: '20px auto',
-    backgroundColor: '#fd2046',
+    backgroundColor: 'primary.main',
   },
   '@media (max-width: 600px)': {
     fontSize: '20px',
@@ -55,7 +56,7 @@ const Home = () => {
   return (
     <div className="root">
       <div>
-        <Heading level={1} imageUrl={img}>
+        <Heading level={1} imageUrl="/images/primaryHeading.jpg">
           SPICE ROUTE KITCHEN
         </Heading>
 
@@ -71,7 +72,9 @@ const Home = () => {
             </Typography>
 
             <Link to="/foods">
-              <Button variant="contained">See Foods</Button>
+              <Button variant="contained" startIcon={<LocalDiningIcon />}>
+                View Our Menu
+              </Button>
             </Link>
           </DescriptionLeft>
           <div>

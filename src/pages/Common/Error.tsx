@@ -35,8 +35,8 @@ const ButtonLink = styled(Button)({
 const Error = () => {
   return (
     <Container>
-      <Title>404</Title>
-      <Subtitle>Oops! Page not found.</Subtitle>
+      <Title>ERROR</Title>
+      <Subtitle>Oops! Something Went Wrong</Subtitle>
       <Link to="/">
         <ButtonLink variant="contained">Go back home</ButtonLink>
       </Link>

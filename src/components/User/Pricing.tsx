@@ -148,6 +148,7 @@ const Pricing = () => {
                   <Button
                     fullWidth
                     variant={tier.buttonVariant as 'outlined' | 'contained'}
+                    sx={{ color: '#000' }}
                   >
                     {tier.buttonText}
                   </Button>

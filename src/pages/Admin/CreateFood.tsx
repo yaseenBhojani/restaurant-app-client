@@ -1,19 +1,24 @@
-import Alert from '@mui/material/Alert';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
+import { createFood } from '../../store/reducers/foodReducer';
+import storeImage from '../../utils/storeImage';
+
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import Check from '@mui/icons-material/Check';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import Grid from '@mui/material/Grid';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 import Heading from '../../components/Common/Heading';
-import img from '../../assets/images/img2.jpg';
-import storeImage from '../../utils/storeImage';
-import { AppDispatch, RootState } from '../../store';
-import { createFood } from '../../store/reducers/foodReducer';
+import { setIsLoading } from '../../store/reducers/adminFoodItemReducer';
 
 const Root = styled('form')({
   display: 'flex',
@@ -33,28 +38,85 @@ const Content = styled(Paper)({
   padding: '2rem',
   maxWidth: '600px',
   width: '100%',
+  borderRadius: '10px',
 });
 
-const ImageInput = styled('input')({
-  display: 'none',
+const ImageInput = styled('label')({
+  display: 'block',
+  width: '100%',
+  height: '200px',
+  border: '2px dashed #ccc',
+  borderRadius: '5px',
+  textAlign: 'center',
+  cursor: 'pointer',
+  '&:hover': {
+    backgroundColor: '#f5f5f5',
+  },
+  '& img': {
+    maxWidth: '100%',
+    maxHeight: '100%',
+    objectFit: 'contain',
+    borderRadius: '5px',
+  },
+  '& svg': {
+    fontSize: '3rem',
+    color: '#ccc',
+    marginTop: '1rem',
+  },
+});
+
+const ImageBox = styled(Box)({
+  width: '100%',
+  height: '200px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '5px',
+  backgroundColor: '#f5f5f5',
+  overflow: 'hidden',
+  position: 'relative',
+});
+
+const SelectedIcon = styled('div')({
+  position: 'absolute',
+  bottom: '10px',
+  right: '10px',
+  borderRadius: '50%',
+  backgroundColor: '#fff',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)',
+  width: '50px',
+  height: '50px',
+  '& svg': {
+    fontSize: '2rem',
+    color: '#4caf50',
+  },
 });
 
 const CreateFood = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { isLoading } = useSelector((state: RootState) => state.food);
 
-  const [isImageLoad, setIsImageLoad] = useState(false);
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
-  const [foodCreated, setFoodCreated] = useState(false);
   const [image, setImage] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setImage(event.target.files[0]);
+    const files = event.target.files;
+    if (files && files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        setImage(files[0]);
+        setImagePreviewUrl(e?.target?.result as string);
+      };
+      reader.readAsDataURL(files[0]);
     }
   };
 
@@ -63,107 +125,159 @@ const CreateFood = () => {
 
     // Validate inputs
     if (!name || !description || !price || !category || !image) {
-      return setError('Please fill out all fields');
+      return setError('Please fill all fields');
     }
 
-    setIsImageLoad(true);
-    // Upload image to Firebase Storage
-    const url = await storeImage(image);
+    if (isNaN(Number(price))) {
+      return setError('Price should be a number');
+    }
 
-    console.log(name, description, price, url, category);
+    setError('');
 
-    dispatch(
-      createFood({
+    try {
+      // Upload image
+      setIsLoading(true);
+      const imageUrl = await storeImage(image);
+      setIsLoading(false);
+
+      if (!imageUrl) {
+        return setError('Error uploading image');
+      }
+
+      // Create food
+      const foodData = {
         name,
         description,
-        price: +price,
+        price: Number(price),
         category,
-        image: url,
-      })
-    )
-      .unwrap()
-      .then(() => setFoodCreated(true))
-      .catch((error: any) => setError(error.message));
-
-    // Reset form
-    setName('');
-    setDescription('');
-    setPrice('');
-    setCategory('');
-    setImage(null);
-    setIsImageLoad(false);
+        image: imageUrl,
+      };
+      setIsLoading(true);
+      await dispatch(createFood(foodData)).unwrap();
+      setSuccess(true);
+      setCategory('');
+      setDescription('');
+      setError('');
+      setImage(null);
+      setImagePreviewUrl('');
+      setName('');
+      setPrice('');
+    } catch (error) {
+      setError('Error creating food');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <>
-      <Heading level={2} imageUrl={img}>
-        CREATE FOOD
+      <Heading level={2} imageUrl="/images/secondaryHeading.jpg">
+        Create Food
       </Heading>
-      {foodCreated && (
-        <Alert onClose={() => setFoodCreated(false)}>
-          Food created successfully
-        </Alert>
-      )}
-      {error && (
-        <Alert onClose={() => setError('')} severity="error">
-          {error}
-        </Alert>
-      )}
       <Wrapper>
-        <Grid container justifyContent="center">
-          <Grid item xs={12} sm={10} md={8} lg={6}>
-            <Content>
-              <Root onSubmit={handleSubmit}>
-                <TextField
-                  label="Name"
-                  value={name}
-                  onChange={event => setName(event.target.value)}
-                  required
-                />
-                <TextField
-                  label="Description"
-                  value={description}
-                  onChange={event => setDescription(event.target.value)}
-                  required
-                />
+        <Content elevation={3}>
+          {success && (
+            <Alert severity="success" sx={{ mb: '1rem' }}>
+              <AlertTitle>Success</AlertTitle>
+              Food created successfully.
+            </Alert>
+          )}
+          {error && (
+            <Alert severity="error" sx={{ mb: '1rem' }}>
+              <AlertTitle>Error</AlertTitle>
+              {error}
+            </Alert>
+          )}
+          <Root onSubmit={handleSubmit}>
+            <TextField
+              label="Name"
+              variant="outlined"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              fullWidth
+              margin="normal"
+              required
+            />
+
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   label="Price"
+                  variant="outlined"
                   value={price}
-                  onChange={event => setPrice(event.target.value)}
+                  onChange={e => setPrice(e.target.value)}
+                  fullWidth
+                  margin="normal"
                   required
-                  type="number"
+                  InputProps={{
+                    startAdornment: (
+                      <AttachMoneyIcon
+                        sx={{ color: 'action.active', mr: 1, my: 0.5 }}
+                      />
+                    ),
+                  }}
                 />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   label="Category"
+                  variant="outlined"
                   value={category}
-                  onChange={event => setCategory(event.target.value)}
+                  onChange={e => setCategory(e.target.value)}
+                  fullWidth
+                  margin="normal"
                   required
                 />
-                <Box>
-                  <ImageInput
-                    accept="image/*"
-                    id="image-input"
-                    type="file"
-                    onChange={handleImageChange}
-                  />
-                  <label htmlFor="image-input">
-                    <Button variant="outlined" component="span">
-                      Upload Image
-                    </Button>
-                  </label>
-                  {image && <p>{image.name}</p>}
-                </Box>
-                <LoadingButton
-                  variant="contained"
-                  type="submit"
-                  loading={isLoading || isImageLoad}
-                >
-                  Create
-                </LoadingButton>
-              </Root>
-            </Content>
-          </Grid>
-        </Grid>
+              </Grid>
+            </Grid>
+
+            <TextField
+              label="Description"
+              variant="outlined"
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+              fullWidth
+              margin="normal"
+              multiline
+              rows={4}
+              required
+            />
+
+            <ImageInput>
+              {imagePreviewUrl ? (
+                <ImageBox>
+                  <img src={imagePreviewUrl} alt="Food" />
+                  <SelectedIcon>
+                    <Check />
+                  </SelectedIcon>
+                </ImageBox>
+              ) : (
+                <>
+                  <PhotoCameraIcon />
+                  <p>Click to upload an image</p>
+                </>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: 'none' }}
+              />
+            </ImageInput>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              size="large"
+              color="primary"
+              loading={isLoading}
+              sx={{ mt: '1rem' }}
+              startIcon={<DoneAllIcon />}
+            >
+              Create
+            </LoadingButton>
+          </Root>
+        </Content>
       </Wrapper>
     </>
   );

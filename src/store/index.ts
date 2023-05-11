@@ -4,6 +4,7 @@ import foodReducer from './reducers/foodReducer';
 import cartReducer from './reducers/cartReducer';
 import checkoutReducer from './reducers/checkoutReducer';
 import orderReducer from './reducers/orderReducer';
+import adminFoodItemReducer from './reducers/adminFoodItemReducer';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   checkout: checkoutReducer,
   order: orderReducer,
+  adminFoodItem: adminFoodItemReducer,
 });
 
 export const store = configureStore({

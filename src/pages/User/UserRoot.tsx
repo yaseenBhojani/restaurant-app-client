@@ -23,8 +23,8 @@ const UserRoot = () => {
     dispatch(isAuth())
       .unwrap()
       .then(res => res.role === 'ADMIN' && navigate('/admin'))
-      .catch((error: any) => console.log(error));
-  }, []);
+      .catch((error: unknown) => console.log(error));
+  }, [dispatch, navigate]);
 
   return (
     <>

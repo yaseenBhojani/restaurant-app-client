@@ -12,8 +12,12 @@ export const createOrderHandler = async (checkoutData: Order) => {
       },
     });
     return response.data;
-  } catch (error: any) {
-    throw new Error(error.response.data.message);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message ?? 'An error occurred');
+    } else {
+      throw new Error('An error occurred');
+    }
   }
 };
 
@@ -26,8 +30,12 @@ export const getOrdersHandler = async () => {
       },
     });
     return response.data;
-  } catch (error: any) {
-    throw new Error(error.response.data.message);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message ?? 'An error occurred');
+    } else {
+      throw new Error('An error occurred');
+    }
   }
 };
 
@@ -40,8 +48,12 @@ export const getAllOrdersHandler = async () => {
       },
     });
     return response.data;
-  } catch (error: any) {
-    throw new Error(error.response.data.message);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message ?? 'An error occurred');
+    } else {
+      throw new Error('An error occurred');
+    }
   }
 };
 
@@ -61,7 +73,11 @@ export const changeOrderStatusHandler = async ({
       }
     );
     return response.data;
-  } catch (error: any) {
-    throw new Error(error.response.data.message);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message ?? 'An error occurred');
+    } else {
+      throw new Error('An error occurred');
+    }
   }
 };

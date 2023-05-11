@@ -7,8 +7,12 @@ export const createUser = async (user: SignUpUserProp) => {
   try {
     const response = await axios.post(`${BASE_URL}user`, user);
     return response.data;
-  } catch (error: any) {
-    throw new Error(error.response.data.message);
+  } catch (error: unknown) {
+    throw new Error(
+      axios.isAxiosError(error)
+        ? error.response?.data?.message ?? 'An error occurred'
+        : 'An error occurred'
+    );
   }
 };
 
@@ -16,8 +20,12 @@ export const loginUser = async (user: LoginUserProp) => {
   try {
     const response = await axios.post(`${BASE_URL}auth`, user);
     return response.data;
-  } catch (error: any) {
-    throw new Error(error.response.data.message);
+  } catch (error: unknown) {
+    throw new Error(
+      axios.isAxiosError(error)
+        ? error.response?.data?.message ?? 'An error occurred'
+        : 'An error occurred'
+    );
   }
 };
 
@@ -30,7 +38,11 @@ export const isAuthUser = async () => {
       },
     });
     return response.data;
-  } catch (error: any) {
-    throw new Error(error.response.data.message);
+  } catch (error: unknown) {
+    throw new Error(
+      axios.isAxiosError(error)
+        ? error.response?.data?.message ?? 'An error occurred'
+        : 'An error occurred'
+    );
   }
 };

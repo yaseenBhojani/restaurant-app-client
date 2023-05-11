@@ -1,16 +1,17 @@
-import { useState } from 'react';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import Grid from '@mui/material/Unstable_Grid2';
-import FoodCard from '../../components/User/FoodCard';
 import Heading from '../../components/Common/Heading';
+import Grid from '@mui/material/Unstable_Grid2';
+
+import AdminFoodCard from '../../components/Admin/AdminFoodCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getFoods } from '../../store/reducers/foodReducer';
 import Spinner from '../../components/Common/Spinner';
+import Stack from '@mui/material/Stack';
+import Pagination from '@mui/material/Pagination';
+import DeleteFoodItemModal from '../../components/Admin/DeleteFoodModal';
 
-const Foods = () => {
+const AdminFoods = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { foods, isLoading } = useSelector((state: RootState) => state.food);
   const [page, setPage] = useState(1);
@@ -30,13 +31,16 @@ const Foods = () => {
   }
 
   const startIndex = (page - 1) * itemsPerPage;
-  const displayedFoods = foods.slice(startIndex, startIndex + itemsPerPage);
+  const displayedFoods =
+    foods?.length > 0 ? foods.slice(startIndex, startIndex + itemsPerPage) : [];
 
   return (
     <div>
       <Heading level={2} imageUrl="/images/secondaryHeading.jpg">
-        Delicious Foods
+        Foods
       </Heading>
+
+      <DeleteFoodItemModal />
 
       {displayedFoods.length > 0 && (
         <>
@@ -55,7 +59,7 @@ const Foods = () => {
                 justifyContent="center"
                 key={food._id}
               >
-                <FoodCard {...food} />
+                <AdminFoodCard {...food} />
               </Grid>
             ))}
           </Grid>
@@ -68,4 +72,4 @@ const Foods = () => {
   );
 };
 
-export default Foods;
+export default AdminFoods;

@@ -12,6 +12,8 @@ import AdminOrders from './pages/Admin/AdminOrders';
 import CreateFood from './pages/Admin/CreateFood';
 import UserRoot from './pages/User/UserRoot';
 import AdminRoot from './pages/Admin/AdminRoot';
+import AdminFoods from './pages/Admin/AdminFoods';
+import UpdateFood from './pages/Admin/UpdateFood';
 
 const router = createBrowserRouter([
   {
@@ -56,11 +58,19 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <AdminFoods />,
+      },
+      {
+        path: 'orders',
         element: <AdminOrders />,
       },
       {
         path: 'create-food',
         element: <CreateFood />,
+      },
+      {
+        path: 'update-food/:id',
+        element: <UpdateFood />,
       },
     ],
   },

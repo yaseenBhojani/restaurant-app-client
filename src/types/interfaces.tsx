@@ -5,14 +5,7 @@ export interface IChildren {
   children: ReactNode;
 }
 
-// Heading interface
-export interface IHeading {
-  children: ReactNode;
-  level: 1 | 2 | 3 | 4;
-  imageUrl: string;
-}
-
-// Food interfaces
+// Interfaces related to food items
 export interface FoodItem {
   _id?: string;
   category: string;
@@ -24,10 +17,10 @@ export interface FoodItem {
 
 export interface FoodState {
   isLoading: boolean;
-  foods: FoodItem[] | [];
+  foods: FoodItem[];
 }
 
-// Cart interfaces
+// Interfaces related to the shopping cart
 export interface CartItem {
   _id?: string;
   category: string;
@@ -44,7 +37,7 @@ export interface CartState {
   totalPrice: number;
 }
 
-// Checkout interfaces
+// Interfaces related to the checkout process
 export interface CheckoutState {
   shippingAddress: {
     email: string;
@@ -63,8 +56,7 @@ export interface CheckoutState {
   };
 }
 
-// Order interfaces
-
+// Interfaces related to orders
 export interface Order {
   _id?: string;
   email: string;
@@ -81,13 +73,17 @@ export interface Order {
   createdAt?: Date;
 }
 
-// OrderState interfaces
 export interface OrderState {
   isLoading: boolean;
-  items: Order[] | [];
+  items: Order[];
 }
 
-// Auth interfaces
+export interface ChangeOrderStatus {
+  id: string;
+  status: string;
+}
+
+// Interfaces related to authentication
 export interface AuthState {
   isLoading: boolean;
   isAuthenticated: boolean;
@@ -106,13 +102,22 @@ export interface LoginUserProp {
   password: string;
 }
 
-export interface ChangeOrderStatus {
-  id: string;
-  status: string;
-}
-
+// Interfaces related to UI components
 export interface SpinnerProps {
   size?: number;
   thickness?: number;
   color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info';
+}
+
+// Interfaces related to headings
+export interface IHeading {
+  children: ReactNode;
+  level: 1 | 2 | 3 | 4;
+  imageUrl: string;
+}
+
+export interface AdminFoodItemState {
+  isLoading: boolean;
+  deleteItem: null | string;
+  deleteModalIsOpen: boolean;
 }

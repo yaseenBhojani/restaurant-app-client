@@ -19,8 +19,6 @@ export const validateCheckoutFields = (checkoutData: CheckoutState) => {
 
   if (!checkoutData.shippingAddress.zip) {
     errors.zip = 'ZIP code is required';
-  } else if (!/^\d{5}(?:[-\s]\d{4})?$/.test(checkoutData.shippingAddress.zip)) {
-    errors.zip = 'ZIP code is invalid';
   }
 
   if (!checkoutData.shippingAddress.country) {

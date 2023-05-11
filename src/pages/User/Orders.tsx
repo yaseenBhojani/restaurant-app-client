@@ -1,112 +1,64 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Grid, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 
 import Heading from '../../components/Common/Heading';
-import img from '../../assets/images/img4.jpg';
-import { AppDispatch, RootState } from '../../store';
 import { getOrders } from '../../store/reducers/orderReducer';
+import { AppDispatch, RootState } from '../../store';
+import { Order } from '../../types/interfaces';
+import OrderCard from '../../components/User/OrderCard';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import axios from 'axios';
 
 const Orders = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { items } = useSelector((state: RootState) => state.order);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    dispatch(getOrders())
-      .unwrap()
-      .catch((error: any) => console.log(error));
-  }, []);
+    dispatch(getOrders()).catch((error: unknown) => {
+      setError(
+        axios.isAxiosError(error)
+          ? error.response?.data?.message ?? 'An error occurred'
+          : 'An error occurred'
+      );
+    });
+  }, [dispatch]);
+
+  const { items } = useSelector((state: RootState) => state.order);
 
   return (
     <>
-      <Heading level={2} imageUrl={img}>
+      <Heading level={2} imageUrl="/images/secondaryHeading.jpg">
         YOUR ORDERS
       </Heading>
       <Box sx={{ m: 4 }}>
-        <Grid container spacing={2} alignItems="stretch">
-          {items.map((order, index) => (
-            <Grid item key={order._id} xs={12} sm={6} md={4} lg={3}>
-              <Card
-                variant="outlined"
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                <CardHeader
-                  title={`Order #${index + 1}`}
-                  subheader={order.createdAt?.toString().slice(0, 10)}
-                />
-                <Divider />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  {order.items.length > 0 ? (
-                    <List
-                      sx={{
-                        maxHeight: 200,
-                        overflow: 'auto',
-                        '&::-webkit-scrollbar': {
-                          width: 8,
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                          backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                          borderRadius: 4,
-                        },
-                        '&::-webkit-scrollbar-thumb:hover': {
-                          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                        },
-                      }}
-                    >
-                      {order.items.map(item => (
-                        <ListItem key={item._id} disableGutters>
-                          <ListItemText
-                            primary={item.name}
-                            secondary={`$${item.price} x ${item.quantity}`}
-                          />
-                        </ListItem>
-                      ))}
-                    </List>
-                  ) : (
-                    <Typography variant="body1">
-                      No items in this order
-                    </Typography>
-                  )}
-                </CardContent>
-                <Divider />
-                <Box sx={{ p: 2 }}>
-                  <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                    Total: ${order.totalAmount.toFixed(2)}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color={
-                      order.status === 'Pending'
-                        ? 'primary'
-                        : order.status === 'Accepted'
-                        ? 'success'
-                        : 'error'
-                    }
-                    sx={{ width: '100%' }}
-                  >
-                    {order.status}
-                  </Button>
-                </Box>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        {error && (
+          <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            {error}
+          </Alert>
+        )}
+        {isAuthenticated ? (
+          <Grid container spacing={2} alignItems="stretch">
+            {items.map((order: Order, index: number) => (
+              <OrderCard key={order._id} order={order} index={index} />
+            ))}
+          </Grid>
+        ) : (
+          <Typography
+            variant="h3"
+            component="div"
+            sx={{
+              color: 'primary.main',
+              textAlign: 'center',
+              fontSize: { xs: '1.8rem', sm: '2rem', md: '3rem' },
+            }}
+          >
+            You need to log in to view your orders
+          </Typography>
+        )}
       </Box>
     </>
   );

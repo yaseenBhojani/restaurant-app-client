@@ -59,7 +59,6 @@ export const orderSlice = createSlice({
       })
       .addCase(changeOrderStatus.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log(action.payload);
         state.items = state.items.map(item => {
           if (item._id === action.payload.id) {
             return action.payload;
@@ -72,7 +71,5 @@ export const orderSlice = createSlice({
       });
   },
 });
-
-export const {} = orderSlice.actions;
 
 export default orderSlice.reducer;

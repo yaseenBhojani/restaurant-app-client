@@ -1,17 +1,22 @@
+import axios from 'axios';
+import { FormEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import LoadingButton from '@mui/lab/LoadingButton';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
+import LoadingButton from '@mui/lab/LoadingButton';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { FormEvent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import LoginIcon from '@mui/icons-material/Login';
 
 import { AppDispatch, RootState } from '../../store';
 import { isValidEmail } from '../../utils/emailValidator';
@@ -23,35 +28,39 @@ const Login = () => {
   const { isLoading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [error, setError] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const changePasswordVisibility = () =>
+    setIsPasswordVisible(prevState => !prevState);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     const email = data.get('email') as string;
     const password = data.get('password') as string;
 
-    if (!email || !password) {
-      return setError('Please fill in all fields!');
-    }
+    if (!email || !password) return setError('Please fill in all fields!');
 
-    if (!isValidEmail(email)) {
-      return setError('Please enter a valid email!');
-    }
+    if (!isValidEmail(email)) return setError('Please enter a valid email!');
 
     if (!isValidPassword(password)) {
       return setError('Please enter a valid password!');
     }
 
     setError('');
-    dispatch(login({ email, password }))
-      .unwrap()
-      .then(res => {
-        res.userCred.role === 'ADMIN' ? navigate('/admin') : navigate('/');
-        localStorage.setItem('accessToken', res.accessToken);
-        localStorage.setItem('refreshToken', res.refreshToken);
-      })
-      .catch((error: any) => setError(error.message));
+    try {
+      const res = await dispatch(login({ email, password })).unwrap();
+      res.userCred.role === 'ADMIN' ? navigate('/admin') : navigate('/');
+      localStorage.setItem('accessToken', res.accessToken);
+      localStorage.setItem('refreshToken', res.refreshToken);
+    } catch (error: unknown) {
+      setError(
+        axios.isAxiosError(error)
+          ? error.response?.data?.message ?? 'An error occurred'
+          : 'An error occurred'
+      );
+    }
   };
 
   return (
@@ -93,16 +102,36 @@ const Login = () => {
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={isPasswordVisible ? 'text' : 'password'}
             id="password"
             autoComplete="current-password"
+            InputProps={{
+              endAdornment: isPasswordVisible ? (
+                <VisibilityIcon
+                  color="secondary"
+                  onClick={changePasswordVisibility}
+                  cursor="pointer"
+                />
+              ) : (
+                <VisibilityOffIcon
+                  color="secondary"
+                  onClick={changePasswordVisibility}
+                  cursor="pointer"
+                />
+              ),
+            }}
           />
           <LoadingButton
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2, backgroundColor: '#fd2046' }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              backgroundColor: 'primary.main',
+            }}
             loading={isLoading}
+            startIcon={<LoginIcon />}
           >
             Login
           </LoadingButton>

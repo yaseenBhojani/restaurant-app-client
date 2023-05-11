@@ -1,7 +1,11 @@
+import { FormEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import LoadingButton from '@mui/lab/LoadingButton';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
@@ -9,9 +13,10 @@ import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { FormEvent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import LoadingButton from '@mui/lab/LoadingButton';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 import { AppDispatch, RootState } from '../../store';
 import { isValidEmail } from '../../utils/emailValidator';
@@ -23,8 +28,12 @@ const SignUp = () => {
   const { isLoading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [error, setError] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const changePasswordVisibility = () =>
+    setIsPasswordVisible(prevState => !prevState);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
@@ -37,9 +46,7 @@ const SignUp = () => {
       return setError('All fields are required!');
     }
 
-    if (!isValidEmail(email as string)) {
-      return setError('Email is not valid!');
-    }
+    if (!isValidEmail(email as string)) return setError('Email is not valid!');
 
     if (!isValidPassword(password as string)) {
       return setError('Password must be at least 6 characters!');
@@ -47,10 +54,16 @@ const SignUp = () => {
 
     if (error) setError('');
 
-    dispatch(signUp({ username, email, password, role }))
-      .unwrap()
-      .then(() => navigate('/login'))
-      .catch((error: any) => setError(error.message));
+    try {
+      await dispatch(signUp({ username, email, password, role })).unwrap();
+      navigate('/login');
+    } catch (error: unknown) {
+      setError(
+        axios.isAxiosError(error)
+          ? error.response?.data?.message ?? 'An error occurred'
+          : 'An error occurred'
+      );
+    }
   };
 
   return (
@@ -104,9 +117,24 @@ const SignUp = () => {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={isPasswordVisible ? 'text' : 'password'}
                 id="password"
                 autoComplete="new-password"
+                InputProps={{
+                  endAdornment: isPasswordVisible ? (
+                    <VisibilityIcon
+                      color="secondary"
+                      onClick={changePasswordVisibility}
+                      cursor="pointer"
+                    />
+                  ) : (
+                    <VisibilityOffIcon
+                      color="secondary"
+                      onClick={changePasswordVisibility}
+                      cursor="pointer"
+                    />
+                  ),
+                }}
               />
             </Grid>
           </Grid>
@@ -116,6 +144,7 @@ const SignUp = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             loading={isLoading}
+            startIcon={<HowToRegIcon />}
           >
             Sign Up
           </LoadingButton>

@@ -3,10 +3,22 @@ import { createTheme } from '@mui/material/styles';
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#fd2046',
+      main: '#fe7f32',
     },
     secondary: {
-      main: '#fff',
+      main: '#181f2e',
+    },
+    error: {
+      main: '#ff0000',
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: '#fff',
+        },
+      },
     },
   },
 });
