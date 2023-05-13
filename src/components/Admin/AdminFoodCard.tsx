@@ -37,12 +37,17 @@ const AdminFoodCard = ({
     <Card
       sx={{
         width: 345,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: 'white',
+        borderRadius: 2,
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+        transition: 'box-shadow 0.3s ease-in-out',
+        '&:hover': {
+          boxShadow: '0px 8px 8px rgba(0, 0, 0, 0.3)',
+        },
       }}
     >
       <CardMedia
-        sx={{ height: 200, border: '2px solid #E5E5E5' }}
+        sx={{ height: 200, borderRadius: '10px 10px 0px 0px' }}
         image={image}
         title="food item"
       />
@@ -52,14 +57,24 @@ const AdminFoodCard = ({
           gutterBottom
           variant="h5"
           component="div"
-          sx={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#222222' }}
+          sx={{
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            color: '#222222',
+            marginTop: '1rem',
+          }}
         >
           {name}
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ fontSize: '1.125rem', color: '#444444', marginBottom: '1rem' }}
+          sx={{
+            fontSize: '1.125rem',
+            color: '#444444',
+            marginTop: '0.5rem',
+            marginBottom: '1rem',
+          }}
         >
           {description}
         </Typography>
@@ -67,19 +82,25 @@ const AdminFoodCard = ({
           variant="body2"
           color="text.secondary"
           sx={{
-            fontSize: '1.125rem',
+            fontSize: '1rem',
             color: '#666666',
             marginBottom: '0.5rem',
+            textTransform: 'uppercase',
+            letterSpacing: 1,
           }}
         >
-          Category: {category}
+          {category}
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ fontSize: '1.125rem', color: '#666666' }}
+          sx={{
+            fontSize: '1.125rem',
+            color: '#222222',
+            fontWeight: 'bold',
+          }}
         >
-          Price: ${price}
+          ${price}
         </Typography>
       </CardContent>
 
@@ -93,7 +114,7 @@ const AdminFoodCard = ({
           }}
           onClick={handleUpdate}
         >
-          <EditIcon />
+          <EditIcon sx={{ fontSize: '1.5rem' }} />
         </IconButton>
         <IconButton
           color="error"
@@ -104,7 +125,7 @@ const AdminFoodCard = ({
           }}
           onClick={handleDelete}
         >
-          <DeleteIcon />
+          <DeleteIcon sx={{ fontSize: '1.5rem' }} />
         </IconButton>
       </CardActions>
     </Card>

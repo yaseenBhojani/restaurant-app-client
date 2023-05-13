@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { TableCellProps } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -23,7 +23,9 @@ import {
   getAllOrders,
 } from '../../store/reducers/orderReducer';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled((props: TableCellProps) => (
+  <TableCell {...props} />
+))(({ theme }) => ({
   fontWeight: 'bold',
   [theme.breakpoints.down('sm')]: {
     fontSize: '0.75rem',
@@ -93,7 +95,7 @@ const AdminOrdersPage = () => {
         </Alert>
       )}
       <TableContainer component={Paper} sx={{ mt: 2 }}>
-        <Table sx={{ minWidth: 650 }} aria-label="Orders Table">
+        <Table aria-label="Orders Table">
           <TableHead>
             <TableRow sx={{ backgroundColor: 'secondary.main' }}>
               <StyledTableCell sx={{ color: 'common.white' }}>
@@ -118,7 +120,7 @@ const AdminOrdersPage = () => {
           </TableHead>
           <TableBody>
             {items.length > 0 &&
-              items.map(order => {
+              items.map((order, index) => {
                 const isSelected = selectedOrderId === order._id;
 
                 return (
@@ -126,17 +128,23 @@ const AdminOrdersPage = () => {
                     <TableRow
                       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                       onClick={() => handleRowClick(order._id!)}
-                      sx={{ cursor: 'pointer' }}
+                      sx={{
+                        cursor: 'pointer',
+                        backgroundColor:
+                          index % 2 === 0 ? 'background.paper' : '#f5f5f5',
+                      }}
                     >
-                      <TableCell component="th" scope="row">
-                        {order._id}
-                      </TableCell>
-                      <TableCell align="right">{order.email}</TableCell>
-                      <TableCell align="right">{order.address}</TableCell>
-                      <TableCell align="right">
+                      <StyledTableCell>{order._id}</StyledTableCell>
+                      <StyledTableCell align="right">
+                        {order.email}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {order.address}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
                         ${order.totalAmount.toFixed(2)}
-                      </TableCell>
-                      <TableCell align="right">
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
                         {isSelected ? (
                           <Select
                             value={order.status}
@@ -149,10 +157,10 @@ const AdminOrdersPage = () => {
                         ) : (
                           order.status
                         )}
-                      </TableCell>
-                      <TableCell align="right">
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
                         {order.createdAt?.toString().slice(0, 10)}
-                      </TableCell>
+                      </StyledTableCell>
                     </TableRow>
                     {isSelected && (
                       <TableRow>

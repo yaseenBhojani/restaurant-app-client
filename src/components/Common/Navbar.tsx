@@ -15,6 +15,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import LockIcon from '@mui/icons-material/Lock';
 
 import { logout } from '../../store/reducers/authReducer';
 import { AppDispatch, RootState } from '../../store';
@@ -31,13 +33,35 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const Logo = styled('img')({
   width: '100px',
+  '@media (max-width: 600px)': {
+    width: '80px',
+  },
 });
 
-// Pages configuration
-const userPages = ['HOME', 'FOODS', 'CART', 'ORDERS'];
-const adminPages = ['FOODS', 'ORDERS', 'CREATE FOOD'];
+// Styles
+const authBtnStyle = {
+  color: '#fff',
+  borderColor: '#fff',
+  '&:hover': {
+    backgroundColor: 'primary.dark',
+    color: '#fff',
+    borderColor: '#fff',
+  },
+};
 
-// Component definition
+// Pages configuration
+const userPages = [
+  { name: 'HOME', icon: 'home' },
+  { name: 'FOODS', icon: 'utensils' },
+  { name: 'CART', icon: 'shopping-cart' },
+  { name: 'ORDERS', icon: 'clipboard-list' },
+];
+const adminPages = [
+  { name: 'FOODS', icon: 'utensils' },
+  { name: 'ORDERS', icon: 'clipboard-list' },
+  { name: 'CREATE FOOD', icon: 'plus-circle' },
+];
+
 const ResponsiveAppBar = () => {
   // Hooks
   const navigate = useNavigate();
@@ -80,7 +104,6 @@ const ResponsiveAppBar = () => {
     navigate('/');
   };
 
-  // Render
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -130,8 +153,14 @@ const ResponsiveAppBar = () => {
               }}
             >
               {(role === 'USER' ? userPages : adminPages).map(page => (
-                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem
+                  key={page.name}
+                  onClick={() => handleCloseNavMenu(page.name)}
+                >
+                  <Typography component="span" sx={{ marginRight: 2 }}>
+                    <i className={`fas fa-${page.icon}`} />
+                  </Typography>
+                  <Typography>{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -154,11 +183,14 @@ const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {(role === 'USER' ? userPages : adminPages).map(page => (
               <Button
-                key={page}
-                onClick={() => handleCloseNavMenu(page)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                key={page.name}
+                onClick={() => handleCloseNavMenu(page.name)}
+                sx={{ mx: 1, color: 'white' }}
               >
-                {page}
+                <Typography component="span" sx={{ marginRight: 1 }}>
+                  <i className={`fas fa-${page.icon}`} />
+                </Typography>
+                <Typography>{page.name}</Typography>
               </Button>
             ))}
           </Box>
@@ -178,11 +210,21 @@ const ResponsiveAppBar = () => {
 
           {/* Login/logout button */}
           {!isAuthenticated ? (
-            <Button sx={{ color: '#fff' }} onClick={() => navigate('/login')}>
+            <Button
+              sx={authBtnStyle}
+              onClick={() => navigate('/login')}
+              startIcon={<LockIcon />}
+              variant="outlined"
+            >
               Login
             </Button>
           ) : (
-            <Button sx={{ color: '#fff' }} onClick={logoutHandler}>
+            <Button
+              sx={authBtnStyle}
+              onClick={logoutHandler}
+              startIcon={<LockOpenIcon />}
+              variant="outlined"
+            >
               Logout
             </Button>
           )}

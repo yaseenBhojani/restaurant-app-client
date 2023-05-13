@@ -17,11 +17,10 @@ import { addItem, removeItem } from '../../store/reducers/cartReducer';
 const FoodCardWrapper = styled(Card)({
   width: 345,
   margin: '0 auto',
-  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
-  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+  transition: 'box-shadow 0.3s ease-in-out',
   '&:hover': {
-    transform: 'scale(1.05)',
-    boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+    boxShadow: '0px 8px 8px rgba(0, 0, 0, 0.3)',
   },
 });
 

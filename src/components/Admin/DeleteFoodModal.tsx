@@ -8,6 +8,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import { AppDispatch, RootState } from '../../store';
 import { setDeleteModalIsOpen } from '../../store/reducers/adminFoodItemReducer';
@@ -62,6 +64,7 @@ const DeleteFoodItemModal = () => {
           onClick={handleCancel}
           disabled={isLoading}
           variant="outlined"
+          startIcon={<CancelIcon />}
           sx={{
             color: 'secondary.main',
             borderColor: 'secondary.main',
@@ -75,6 +78,7 @@ const DeleteFoodItemModal = () => {
           disabled={isLoading}
           variant="contained"
           color="error"
+          startIcon={<DeleteIcon />}
         >
           {isLoading ? 'Deleting...' : 'Delete'}
         </Button>
