@@ -110,8 +110,7 @@ const AdminOrdersPage = () => {
                 Order ID
               </StyledTableCell>
               <StyledTableCell align="right" sx={{ color: 'common.white' }}>
-                Email Certainly! Here's the continuation of the code with
-                comments:
+                Email
               </StyledTableCell>
               <StyledTableCell align="right" sx={{ color: 'common.white' }}>
                 Address
