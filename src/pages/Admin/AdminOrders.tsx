@@ -23,6 +23,7 @@ import {
   getAllOrders,
 } from '../../store/reducers/orderReducer';
 
+// Styled component for table cells
 const StyledTableCell = styled((props: TableCellProps) => (
   <TableCell {...props} />
 ))(({ theme }) => ({
@@ -33,22 +34,26 @@ const StyledTableCell = styled((props: TableCellProps) => (
 }));
 
 const AdminOrdersPage = () => {
+  // State variables
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const dispatch = useDispatch<AppDispatch>();
   const { items } = useSelector((state: RootState) => state.order);
 
+  // Handler for row click event
   const handleRowClick = (orderId: string) => {
     setSelectedOrderId(orderId === selectedOrderId ? null : orderId);
   };
 
+  // Handler for status change event
   const handleStatusChange = async (event: SelectChangeEvent<string>) => {
     const newStatus = event.target.value;
 
     if (!selectedOrderId) return;
 
     try {
+      // Dispatch action to change order status
       await dispatch(
         changeOrderStatus({ id: selectedOrderId, status: newStatus })
       ).unwrap();
@@ -65,6 +70,7 @@ const AdminOrdersPage = () => {
   };
 
   useEffect(() => {
+    // Fetch all orders when the component mounts
     const fetchData = async () => {
       try {
         await dispatch(getAllOrders()).unwrap();
@@ -85,6 +91,7 @@ const AdminOrdersPage = () => {
       <Heading level={2} imageUrl="/images/secondaryHeading.jpg">
         ORDERS
       </Heading>
+
       {errorMessage && (
         <Alert
           onClose={() => setErrorMessage('')}
@@ -94,6 +101,7 @@ const AdminOrdersPage = () => {
           {errorMessage}
         </Alert>
       )}
+
       <TableContainer component={Paper} sx={{ mt: 2 }}>
         <Table aria-label="Orders Table">
           <TableHead>
@@ -102,7 +110,8 @@ const AdminOrdersPage = () => {
                 Order ID
               </StyledTableCell>
               <StyledTableCell align="right" sx={{ color: 'common.white' }}>
-                Email
+                Email Certainly! Here's the continuation of the code with
+                comments:
               </StyledTableCell>
               <StyledTableCell align="right" sx={{ color: 'common.white' }}>
                 Address
@@ -126,6 +135,7 @@ const AdminOrdersPage = () => {
                 return (
                   <Fragment key={order._id}>
                     <TableRow
+                      // Handle row click event
                       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                       onClick={() => handleRowClick(order._id!)}
                       sx={{
@@ -146,6 +156,7 @@ const AdminOrdersPage = () => {
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         {isSelected ? (
+                          // Show select input for status change if row is selected
                           <Select
                             value={order.status}
                             onChange={handleStatusChange}
@@ -155,6 +166,7 @@ const AdminOrdersPage = () => {
                             <MenuItem value="Rejected">Rejected</MenuItem>
                           </Select>
                         ) : (
+                          // Show status text if row is not selected
                           order.status
                         )}
                       </StyledTableCell>
