@@ -1,14 +1,14 @@
+import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { styled } from '@mui/system';
+import LocalDiningIcon from '@mui/icons-material/LocalDining';
 
 import Heading from '../../components/Common/Heading';
 import ImageGallery from '../../components/User/ImageGallery';
 import Pricing from '../../components/User/Pricing';
 
-import LocalDiningIcon from '@mui/icons-material/LocalDining';
-
+// Styled components
 const Description = styled('div')(({ theme }) => ({
   display: 'flex',
   gap: '2rem',
@@ -27,6 +27,7 @@ const DescriptionLeft = styled('div')({
   marginBottom: '10px',
 });
 
+// Inline styles
 const descriptionTextStyles = {
   fontSize: '24px',
   fontWeight: 300,
@@ -62,6 +63,7 @@ const Home = () => {
 
         <Description>
           <DescriptionLeft>
+            {/* Description */}
             <Typography variant="h6" sx={descriptionTextStyles}>
               Welcome to our restaurant! We take pride in using the freshest
               ingredients to prepare our delicious meals. Our team of chefs and
@@ -71,18 +73,22 @@ const Home = () => {
               today and taste the difference!
             </Typography>
 
+            {/* View Menu Button */}
             <Link to="/foods">
               <Button variant="contained" startIcon={<LocalDiningIcon />}>
                 View Our Menu
               </Button>
             </Link>
           </DescriptionLeft>
+
+          {/* Image Gallery */}
           <div>
             <ImageGallery />
           </div>
         </Description>
       </div>
 
+      {/* Pricing Component */}
       <Pricing />
     </div>
   );

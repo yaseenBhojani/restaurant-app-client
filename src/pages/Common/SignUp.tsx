@@ -1,38 +1,47 @@
+// Importing required dependencies and components
 import { FormEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import Alert from '@mui/material/Alert';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import LoadingButton from '@mui/lab/LoadingButton';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import HowToRegIcon from '@mui/icons-material/HowToReg';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Container,
+  CssBaseline,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
+import {
+  LockOutlined as LockOutlinedIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
+  HowToReg as HowToRegIcon,
+} from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 
+// Importing custom utilities and redux actions
 import { AppDispatch, RootState } from '../../store';
 import { isValidEmail } from '../../utils/emailValidator';
 import { isValidPassword } from '../../utils/passwordValidator';
 import { signUp } from '../../store/reducers/authReducer';
 
 const SignUp = () => {
+  // Hooks for state management
   const navigate = useNavigate();
   const { isLoading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [error, setError] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+  // Toggles password visibility
   const changePasswordVisibility = () =>
     setIsPasswordVisible(prevState => !prevState);
 
+  // Handles form submission
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -46,14 +55,15 @@ const SignUp = () => {
       return setError('All fields are required!');
     }
 
-    if (!isValidEmail(email as string)) return setError('Email is not valid!');
+    if (!isValidEmail(email)) {
+      return setError('Email is not valid!');
+    }
 
-    if (!isValidPassword(password as string)) {
+    if (!isValidPassword(password)) {
       return setError('Password must be at least 6 characters!');
     }
 
-    if (error) setError('');
-
+    setError('');
     try {
       await dispatch(signUp({ username, email, password, role })).unwrap();
       navigate('/login');

@@ -7,10 +7,12 @@ const initialState: CartState = {
   totalPrice: 0,
 };
 
+// Create the cartSlice using createSlice from Redux Toolkit
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
+    // Reducer to add an item to the cart
     addItem: (state, action: PayloadAction<FoodItem>) => {
       const item = action.payload;
       const existingItem = state.items.find(i => i._id === item._id);
@@ -28,6 +30,7 @@ const cartSlice = createSlice({
       state.totalPrice += item.price;
     },
 
+    // Reducer to remove an item from the cart
     removeItem: (state, action: PayloadAction<string>) => {
       const id = action.payload;
       const existingItemIndex = state.items.findIndex(i => i._id === id);
@@ -40,6 +43,7 @@ const cartSlice = createSlice({
       }
     },
 
+    // Reducer to increment the quantity of an item in the cart
     incrementCount: (state, action: PayloadAction<string>) => {
       const id = action.payload;
       const existingItem = state.items.find(i => i._id === id);
@@ -51,6 +55,7 @@ const cartSlice = createSlice({
       }
     },
 
+    // Reducer to decrement the quantity of an item in the cart
     decrementCount: (state, action: PayloadAction<string>) => {
       const id = action.payload;
       const existingItemIndex = state.items.findIndex(i => i._id === id);
@@ -68,6 +73,7 @@ const cartSlice = createSlice({
       }
     },
 
+    // Reducer to reset the cart to initial state
     resetCart: state => {
       state.items = [];
       state.totalQuantity = 0;
@@ -76,6 +82,7 @@ const cartSlice = createSlice({
   },
 });
 
+// Export the action creators
 export const {
   addItem,
   removeItem,
@@ -84,4 +91,5 @@ export const {
   resetCart,
 } = cartSlice.actions;
 
+// Export the reducer
 export default cartSlice.reducer;

@@ -1,5 +1,10 @@
 import { CheckoutState } from '../types/interfaces';
 
+/**
+ * Validates the checkout fields and returns any validation errors.
+ * @param checkoutData - The checkout data to validate.
+ * @returns An object containing validation errors, if any.
+ */
 export const validateCheckoutFields = (checkoutData: CheckoutState) => {
   const errors: { [key: string]: string } = {};
 

@@ -6,6 +6,7 @@ import {
   changeOrderStatusHandler,
 } from '../../api/orderApi';
 
+// Async thunks for retrieving orders and changing order status
 export const getOrders = createAsyncThunk('get/orders', getOrdersHandler);
 
 export const getAllOrders = createAsyncThunk(
@@ -21,17 +22,20 @@ export const changeOrderStatus = createAsyncThunk(
   }
 );
 
+// Define the initial state for the order slice
 const initialState: OrderState = {
   isLoading: false,
   items: [],
 };
 
+// Create the orderSlice using createSlice from Redux Toolkit
 export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {},
   extraReducers: builder => {
     builder
+      // Get Orders
       .addCase(getOrders.pending, state => {
         state.isLoading = true;
       })
@@ -43,6 +47,7 @@ export const orderSlice = createSlice({
       .addCase(getOrders.rejected, state => {
         state.isLoading = false;
       })
+      // Get All Orders
       .addCase(getAllOrders.pending, state => {
         state.isLoading = true;
       })
@@ -54,6 +59,7 @@ export const orderSlice = createSlice({
       .addCase(getAllOrders.rejected, state => {
         state.isLoading = false;
       })
+      // Change Order Status
       .addCase(changeOrderStatus.pending, state => {
         state.isLoading = true;
       })
@@ -72,4 +78,5 @@ export const orderSlice = createSlice({
   },
 });
 
+// Export the reducer
 export default orderSlice.reducer;

@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
 import {
   AuthState,
   LoginUserProp,
@@ -7,6 +6,7 @@ import {
 } from '../../types/interfaces';
 import { createUser, isAuthUser, loginUser } from '../../api/userApi';
 
+// Async thunk for user signup
 export const signUp = createAsyncThunk(
   'user/signup',
   async (user: SignUpUserProp) => {
@@ -15,6 +15,7 @@ export const signUp = createAsyncThunk(
   }
 );
 
+// Async thunk for user login
 export const login = createAsyncThunk(
   'user/login',
   async (user: LoginUserProp) => {
@@ -23,21 +24,25 @@ export const login = createAsyncThunk(
   }
 );
 
+// Async thunk for checking user authentication
 export const isAuth = createAsyncThunk('user/isAuth', async () => {
   const response = await isAuthUser();
   return response;
 });
 
+// Define the initial state
 const initialState: AuthState = {
   isLoading: false,
   isAuthenticated: false,
   role: 'USER',
 };
 
+// Create the authSlice using createSlice from Redux Toolkit
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    // Reducer for user logout
     logout: state => {
       state.isAuthenticated = false;
       localStorage.removeItem('accessToken');
@@ -88,6 +93,8 @@ export const authSlice = createSlice({
   },
 });
 
+// Export the action creators
 export const { logout } = authSlice.actions;
 
+// Export the reducer
 export default authSlice.reducer;

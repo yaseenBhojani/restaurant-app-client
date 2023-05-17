@@ -1,48 +1,61 @@
-import axios from 'axios';
-import { FormEvent, useState } from 'react';
+// Importing required dependencies and components
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Container,
+  CssBaseline,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
+import {
+  LockOutlined as LockOutlinedIcon,
+  Visibility as VisibilityIcon,
+  VisibilityOff as VisibilityOffIcon,
+  Login as LoginIcon,
+} from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 
-import Alert from '@mui/material/Alert';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
-import LoadingButton from '@mui/lab/LoadingButton';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import LoginIcon from '@mui/icons-material/Login';
-
+// Importing custom utilities and redux actions
 import { AppDispatch, RootState } from '../../store';
 import { isValidEmail } from '../../utils/emailValidator';
 import { isValidPassword } from '../../utils/passwordValidator';
 import { login } from '../../store/reducers/authReducer';
 
 const Login = () => {
+  // Hooks for state management
   const navigate = useNavigate();
   const { isLoading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [error, setError] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const changePasswordVisibility = () =>
+  // Toggles password visibility
+  const changePasswordVisibility = () => {
     setIsPasswordVisible(prevState => !prevState);
+  };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  // Handles form submission
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     const email = data.get('email') as string;
     const password = data.get('password') as string;
 
-    if (!email || !password) return setError('Please fill in all fields!');
+    if (!email || !password) {
+      return setError('Please fill in all fields!');
+    }
 
-    if (!isValidEmail(email)) return setError('Please enter a valid email!');
+    if (!isValidEmail(email)) {
+      return setError('Please enter a valid email!');
+    }
 
     if (!isValidPassword(password)) {
       return setError('Please enter a valid password!');

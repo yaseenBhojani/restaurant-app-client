@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CheckoutState, Order } from '../../types/interfaces';
 import { createOrderHandler } from '../../api/orderApi';
 
+// Async thunk for creating an order
 export const createOrder = createAsyncThunk(
   'order/create',
   async (checkoutData: Order) => {
@@ -11,6 +12,7 @@ export const createOrder = createAsyncThunk(
   }
 );
 
+// Define the initial state for the checkout
 const initialState: CheckoutState = {
   shippingAddress: {
     email: '',
@@ -29,10 +31,12 @@ const initialState: CheckoutState = {
   },
 };
 
+// Create the checkoutSlice using createSlice from Redux Toolkit
 const checkoutSlice = createSlice({
   name: 'checkout',
   initialState,
   reducers: {
+    // Reducers for updating the shipping address
     setEmail: (state, action: PayloadAction<string>) => {
       state.shippingAddress.email = action.payload;
     },
@@ -51,6 +55,7 @@ const checkoutSlice = createSlice({
     setSaveAddress: (state, action: PayloadAction<boolean>) => {
       state.shippingAddress.saveAddress = action.payload;
     },
+    // Reducers for updating the payment method
     setCardName: (state, action: PayloadAction<string>) => {
       state.paymentMethod.cardName = action.payload;
     },
@@ -68,6 +73,7 @@ const checkoutSlice = createSlice({
     },
   },
   extraReducers: builder => {
+    // Error handling for async actions
     builder.addMatcher(
       action => action.type.endsWith('/rejected'),
       (_, action) => {
@@ -77,6 +83,7 @@ const checkoutSlice = createSlice({
   },
 });
 
+// Export the action creators
 export const {
   setEmail,
   setAddress,
@@ -91,4 +98,5 @@ export const {
   setSaveCard,
 } = checkoutSlice.actions;
 
+// Export the reducer
 export default checkoutSlice.reducer;

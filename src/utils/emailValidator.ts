@@ -1,4 +1,9 @@
-export const isValidEmail = (email: string) => {
+/**
+ * Checks if an email address is valid.
+ * @param email - The email address to validate.
+ * @returns A boolean indicating whether the email is valid.
+ */
+export const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };

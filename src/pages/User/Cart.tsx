@@ -13,7 +13,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import CartItem from '../../components/User/CartItem';
 import Heading from '../../components/Common/Heading';
-
 import { Link } from 'react-router-dom';
 
 const CartTable = () => {
@@ -57,7 +56,7 @@ const CartTable = () => {
             </TableHead>
             <TableBody>
               {items.map((item, index) => (
-                <CartItem {...item} key={index} />
+                <CartItem key={index} {...item} />
               ))}
             </TableBody>
           </Table>
@@ -69,10 +68,10 @@ const CartTable = () => {
               p: 2,
             }}
           >
-            <Box sx={{ mr: 2 }}>
+            <Box sx={{ marginRight: 2 }}>
               <strong>Total: ${totalPrice.toFixed(2)}</strong>
             </Box>
-            <Link to="/checkout">
+            <Link to="/checkout" style={{ textDecoration: 'none' }}>
               <Button variant="contained" color="primary">
                 Checkout
               </Button>

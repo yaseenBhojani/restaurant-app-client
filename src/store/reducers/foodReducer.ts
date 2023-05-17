@@ -7,6 +7,7 @@ import {
   updateFood as updateFoodHandler,
 } from '../../api/foodApi';
 
+// Async thunks for CRUD operations
 export const createFood = createAsyncThunk(
   'foods/createFood',
   async (food: FoodItem) => {
@@ -36,11 +37,13 @@ export const updateFood = createAsyncThunk(
   }
 );
 
+// Define the initial state for the food slice
 const initialState: FoodState = {
   isLoading: false,
   foods: [],
 };
 
+// Create the foodSlice using createSlice from Redux Toolkit
 export const foodSlice = createSlice({
   name: 'foods',
   initialState,
@@ -85,4 +88,5 @@ export const foodSlice = createSlice({
   },
 });
 
+// Export the reducer
 export default foodSlice.reducer;

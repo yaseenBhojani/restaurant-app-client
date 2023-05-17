@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import axios from 'axios';
 
 import Heading from '../../components/Common/Heading';
 import { getOrders } from '../../store/reducers/orderReducer';
 import { AppDispatch, RootState } from '../../store';
 import { Order } from '../../types/interfaces';
 import OrderCard from '../../components/User/OrderCard';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import axios from 'axios';
 
 const Orders = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,7 +17,9 @@ const Orders = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Fetch orders when the component mounts
     dispatch(getOrders()).catch((error: unknown) => {
+      // Handle error from API response
       setError(
         axios.isAxiosError(error)
           ? error.response?.data?.message ?? 'An error occurred'
@@ -30,10 +32,12 @@ const Orders = () => {
 
   return (
     <>
+      {/* Page heading */}
       <Heading level={2} imageUrl="/images/secondaryHeading.jpg">
         YOUR ORDERS
       </Heading>
       <Box sx={{ m: 4 }}>
+        {/* Error alert */}
         {error && (
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
@@ -41,12 +45,14 @@ const Orders = () => {
           </Alert>
         )}
         {isAuthenticated ? (
+          // Display orders if the user is authenticated
           <Grid container spacing={2} alignItems="stretch">
             {items.map((order: Order, index: number) => (
               <OrderCard key={order._id} order={order} index={index} />
             ))}
           </Grid>
         ) : (
+          // Prompt user to log in if not authenticated
           <Typography
             variant="h3"
             component="div"
