@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, Fragment } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -106,6 +106,7 @@ const AdminOrdersPage = () => {
         <Table aria-label="Orders Table">
           <TableHead>
             <TableRow sx={{ backgroundColor: 'secondary.main' }}>
+              {/* Table header cells */}
               <StyledTableCell sx={{ color: 'common.white' }}>
                 Order ID
               </StyledTableCell>
@@ -133,6 +134,7 @@ const AdminOrdersPage = () => {
 
                 return (
                   <Fragment key={order._id}>
+                    {/* Order row */}
                     <TableRow
                       // Handle row click event
                       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -173,6 +175,7 @@ const AdminOrdersPage = () => {
                         {order.createdAt?.toString().slice(0, 10)}
                       </StyledTableCell>
                     </TableRow>
+                    {/* Additional row for order details */}
                     {isSelected && (
                       <TableRow>
                         <TableCell colSpan={6}>
