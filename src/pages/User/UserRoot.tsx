@@ -13,24 +13,29 @@ const UserRoot = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if access token and refresh token exist in localStorage
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
+    const checkAuth = async () => {
+      // Check if access token and refresh token exist in localStorage
+      const accessToken = localStorage.getItem('accessToken');
+      const refreshToken = localStorage.getItem('refreshToken');
 
-    if (!accessToken && !refreshToken) {
-      return;
-    }
+      if (!accessToken && !refreshToken) {
+        return;
+      }
 
-    // Dispatch action to check if the user is authenticated
-    dispatch(isAuth())
-      .unwrap()
-      .then(res => {
+      try {
+        // Dispatch action to check if the user is authenticated
+        const res = await dispatch(isAuth()).unwrap();
+
         // Redirect to admin page if user is an admin
         if (res.role === 'ADMIN') {
           navigate('/admin');
         }
-      })
-      .catch(error => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    checkAuth();
   }, [dispatch, navigate]);
 
   return (
