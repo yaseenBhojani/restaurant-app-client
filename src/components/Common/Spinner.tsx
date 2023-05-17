@@ -1,6 +1,8 @@
+import React from 'react';
 import { CircularProgress, styled } from '@mui/material';
 import { SpinnerProps } from '../../types/interfaces';
 
+// StyledSpinner component using the styled API from MUI
 const StyledSpinner = styled(CircularProgress)({
   position: 'absolute',
   top: '50vh',

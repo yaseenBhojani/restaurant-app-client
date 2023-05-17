@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Fragment } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
 
+// Pricing tiers data
 const tiers = [
   {
     title: 'Menu',
@@ -53,16 +54,20 @@ const tiers = [
 
 const Pricing = () => {
   return (
-    <React.Fragment>
+    <Fragment>
+      {/* Global styles */}
       <GlobalStyles
         styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }}
       />
+
+      {/* Main container */}
       <Container
         disableGutters
         maxWidth="sm"
         component="main"
         sx={{ pt: 8, pb: 6 }}
       >
+        {/* Title */}
         <Typography
           component="h1"
           variant="h2"
@@ -72,6 +77,8 @@ const Pricing = () => {
         >
           Pricing
         </Typography>
+
+        {/* Description */}
         <Typography
           variant="h5"
           align="center"
@@ -85,6 +92,7 @@ const Pricing = () => {
         </Typography>
       </Container>
 
+      {/* Pricing tiers */}
       <Container maxWidth="md" component="main">
         <Grid container spacing={5} alignItems="flex-end">
           {tiers.map(tier => (
@@ -96,14 +104,13 @@ const Pricing = () => {
               md={4}
             >
               <Card>
+                {/* Card header */}
                 <CardHeader
                   title={tier.title}
                   subheader={tier.subheader}
                   titleTypographyProps={{ align: 'center' }}
                   action={tier.title === 'Pro' ? <StarIcon /> : null}
-                  subheaderTypographyProps={{
-                    align: 'center',
-                  }}
+                  subheaderTypographyProps={{ align: 'center' }}
                   sx={{
                     backgroundColor: theme =>
                       theme.palette.mode === 'light'
@@ -111,6 +118,8 @@ const Pricing = () => {
                         : theme.palette.grey[700],
                   }}
                 />
+
+                {/* Card content */}
                 <CardContent>
                   <Box
                     sx={{
@@ -131,6 +140,8 @@ const Pricing = () => {
                       /mo
                     </Typography>
                   </Box>
+
+                  {/* Description list */}
                   <ul>
                     {tier.description.map(line => (
                       <Typography
@@ -144,6 +155,8 @@ const Pricing = () => {
                     ))}
                   </ul>
                 </CardContent>
+
+                {/* Card actions */}
                 <CardActions>
                   <Button
                     fullWidth
@@ -158,7 +171,7 @@ const Pricing = () => {
           ))}
         </Grid>
       </Container>
-    </React.Fragment>
+    </Fragment>
   );
 };
 

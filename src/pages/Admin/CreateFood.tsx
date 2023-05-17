@@ -1,9 +1,12 @@
+// Import statements
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { createFood } from '../../store/reducers/foodReducer';
+import { setIsLoading } from '../../store/reducers/adminFoodItemReducer';
 import storeImage from '../../utils/storeImage';
 
+// Material-UI component imports
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import Box from '@mui/material/Box';
 import Check from '@mui/icons-material/Check';
@@ -17,9 +20,10 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
+// Custom component imports
 import Heading from '../../components/Common/Heading';
-import { setIsLoading } from '../../store/reducers/adminFoodItemReducer';
 
+// Styled component definitions
 const Root = styled('form')({
   display: 'flex',
   flexDirection: 'column',
@@ -96,9 +100,11 @@ const SelectedIcon = styled('div')({
 });
 
 const CreateFood = () => {
+  // Redux state and dispatch
   const dispatch = useDispatch<AppDispatch>();
   const { isLoading } = useSelector((state: RootState) => state.food);
 
+  // Form field values and error/success states
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
@@ -108,6 +114,7 @@ const CreateFood = () => {
   const [price, setPrice] = useState('');
   const [success, setSuccess] = useState(false);
 
+  // Handle image selection
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files[0]) {
@@ -120,6 +127,7 @@ const CreateFood = () => {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -171,23 +179,32 @@ const CreateFood = () => {
 
   return (
     <>
+      {/* Heading component */}
       <Heading level={2} imageUrl="/images/secondaryHeading.jpg">
         Create Food
       </Heading>
+
+      {/* Wrapper container */}
       <Wrapper>
+        {/* Content container */}
         <Content elevation={3}>
+          {/* Success message */}
           {success && (
             <Alert severity="success" sx={{ mb: '1rem' }}>
               <AlertTitle>Success</AlertTitle>
               Food created successfully.
             </Alert>
           )}
+
+          {/* Error message */}
           {error && (
             <Alert severity="error" sx={{ mb: '1rem' }}>
               <AlertTitle>Error</AlertTitle>
               {error}
             </Alert>
           )}
+
+          {/* Form */}
           <Root onSubmit={handleSubmit}>
             <TextField
               label="Name"
@@ -245,6 +262,7 @@ const CreateFood = () => {
             />
 
             <ImageInput>
+              {/* Image preview */}
               {imagePreviewUrl ? (
                 <ImageBox>
                   <img src={imagePreviewUrl} alt="Food" />
@@ -258,6 +276,8 @@ const CreateFood = () => {
                   <p>Click to upload an image</p>
                 </>
               )}
+
+              {/* Image input */}
               <input
                 type="file"
                 accept="image/*"
@@ -265,6 +285,8 @@ const CreateFood = () => {
                 style={{ display: 'none' }}
               />
             </ImageInput>
+
+            {/* Submit button */}
             <LoadingButton
               type="submit"
               variant="contained"

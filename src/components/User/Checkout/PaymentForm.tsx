@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { ChangeEvent, Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Checkbox from '@mui/material/Checkbox';
@@ -15,37 +15,40 @@ import {
   setSaveCard,
 } from '../../../store/reducers/checkoutReducer';
 
+// PaymentForm component
 const PaymentForm = () => {
   const dispatch = useDispatch();
 
-  const handleCardNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Event handlers for input changes
+  const handleCardNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setCardName(event.target.value));
   };
 
-  const handleCardNumberChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleCardNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setCardNumber(event.target.value));
   };
 
-  const handleExpDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleExpDateChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setExpDate(event.target.value));
   };
 
-  const handleCvvChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCvvChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setCvv(event.target.value));
   };
 
-  const handleSaveCardChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSaveCardChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setSaveCard(event.target.checked));
   };
 
   return (
-    <React.Fragment>
+    <Fragment>
+      {/* Payment method heading */}
       <Typography variant="h6" gutterBottom>
         Payment method
       </Typography>
+
       <Grid container spacing={3}>
+        {/* Name on card input */}
         <Grid item xs={12} md={6}>
           <TextField
             required
@@ -57,6 +60,8 @@ const PaymentForm = () => {
             onChange={handleCardNameChange}
           />
         </Grid>
+
+        {/* Card number input */}
         <Grid item xs={12} md={6}>
           <TextField
             required
@@ -68,6 +73,8 @@ const PaymentForm = () => {
             onChange={handleCardNumberChange}
           />
         </Grid>
+
+        {/* Expiry date input */}
         <Grid item xs={12} md={6}>
           <TextField
             required
@@ -79,6 +86,8 @@ const PaymentForm = () => {
             onChange={handleExpDateChange}
           />
         </Grid>
+
+        {/* CVV input */}
         <Grid item xs={12} md={6}>
           <TextField
             required
@@ -91,6 +100,8 @@ const PaymentForm = () => {
             onChange={handleCvvChange}
           />
         </Grid>
+
+        {/* Save card checkbox */}
         <Grid item xs={12}>
           <FormControlLabel
             control={
@@ -105,7 +116,7 @@ const PaymentForm = () => {
           />
         </Grid>
       </Grid>
-    </React.Fragment>
+    </Fragment>
   );
 };
 

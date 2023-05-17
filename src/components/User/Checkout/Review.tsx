@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
 import Grid from '@mui/material/Grid';
@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import { RootState } from '../../../store';
 
 const Review = () => {
+  // Get data from the Redux store
   const items = useSelector((state: RootState) => state.cart.items);
   const totalPrice = useSelector((state: RootState) => state.cart.totalPrice);
   const shippingAddress = useSelector(
@@ -20,10 +21,13 @@ const Review = () => {
   );
 
   return (
-    <React.Fragment>
+    <Fragment>
+      {/* Order summary heading */}
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
+
+      {/* List of items */}
       <List disablePadding>
         {items.map(item => (
           <ListItem key={item._id} sx={{ py: 1, px: 0 }}>
@@ -34,6 +38,8 @@ const Review = () => {
             <Typography variant="body2">${item.price.toFixed(2)}</Typography>
           </ListItem>
         ))}
+
+        {/* Total price */}
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
@@ -41,8 +47,10 @@ const Review = () => {
           </Typography>
         </ListItem>
       </List>
+
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
+          {/* Shipping address */}
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Shipping address
           </Typography>
@@ -52,7 +60,9 @@ const Review = () => {
           </Typography>
           <Typography gutterBottom>{shippingAddress.country}</Typography>
         </Grid>
+
         <Grid item xs={12} sm={6}>
+          {/* Payment details */}
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Payment details
           </Typography>
@@ -76,7 +86,7 @@ const Review = () => {
           </Grid>
         </Grid>
       </Grid>
-    </React.Fragment>
+    </Fragment>
   );
 };
 

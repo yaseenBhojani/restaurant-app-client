@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import Grid from '@mui/material/Unstable_Grid2';
 import Pagination from '@mui/material/Pagination';
 import SearchIcon from '@mui/icons-material/Search';
@@ -15,6 +14,7 @@ import DeleteFoodItemModal from '../../components/Admin/DeleteFoodModal';
 import Heading from '../../components/Common/Heading';
 import Spinner from '../../components/Common/Spinner';
 
+// Styled component for the search wrapper
 const SearchWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -39,18 +39,23 @@ const SearchWrapper = styled('div')(({ theme }) => ({
 }));
 
 const AdminFoods = () => {
+  // Redux hooks
   const dispatch = useDispatch<AppDispatch>();
   const { foods, isLoading } = useSelector((state: RootState) => state.food);
+
+  // Component state
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 9;
   const numPages = Math.ceil(foods.length / itemsPerPage);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  // Fetch foods on component mount
   useEffect(() => {
     dispatch(getFoods()).unwrap().catch();
   }, [dispatch]);
 
+  // Add keyboard shortcut to focus search input
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.ctrlKey && event.key === 'k') {
@@ -66,10 +71,12 @@ const AdminFoods = () => {
     };
   }, []);
 
+  // Handle pagination change
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
+  // Filter foods based on search term
   const filteredFoods = foods.filter(food => {
     const searchTermLower = searchTerm.toLowerCase();
     const nameLower = food.name.toLowerCase();
@@ -83,24 +90,29 @@ const AdminFoods = () => {
     );
   });
 
+  // Calculate the range of foods to display on the current page
   const startIndex = (page - 1) * itemsPerPage;
   const displayedFoods = filteredFoods.slice(
     startIndex,
     startIndex + itemsPerPage
   );
 
+  // Show spinner while loading
   if (isLoading) {
     return <Spinner />;
   }
 
   return (
     <div>
+      {/* Heading */}
       <Heading level={2} imageUrl="/images/secondaryHeading.jpg">
         Foods
       </Heading>
 
+      {/* Delete food item modal */}
       <DeleteFoodItemModal />
 
+      {/* Search bar */}
       <SearchWrapper>
         <TextField
           fullWidth
@@ -117,6 +129,7 @@ const AdminFoods = () => {
         />
       </SearchWrapper>
 
+      {/* Displayed foods */}
       {displayedFoods.length > 0 && (
         <>
           <Grid
@@ -139,6 +152,7 @@ const AdminFoods = () => {
             ))}
           </Grid>
 
+          {/* Pagination */}
           <Stack spacing={2} sx={{ margin: '10px auto', width: 'fit-content' }}>
             <Pagination count={numPages} page={page} onChange={handleChange} />
           </Stack>

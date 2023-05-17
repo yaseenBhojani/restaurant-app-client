@@ -1,7 +1,9 @@
 import { createTheme } from '@mui/material/styles';
 
+// Create a custom theme using MUI's `createTheme` function
 export const theme = createTheme({
   palette: {
+    // Define the color palette for the theme
     primary: {
       main: '#fe7f32',
     },
@@ -13,6 +15,7 @@ export const theme = createTheme({
     },
   },
   components: {
+    // Override styles for MUI components
     MuiButton: {
       styleOverrides: {
         root: {

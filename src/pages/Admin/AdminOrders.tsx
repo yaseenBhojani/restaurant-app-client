@@ -88,10 +88,12 @@ const AdminOrdersPage = () => {
 
   return (
     <>
+      {/* Page heading */}
       <Heading level={2} imageUrl="/images/secondaryHeading.jpg">
         ORDERS
       </Heading>
 
+      {/* Error alert */}
       {errorMessage && (
         <Alert
           onClose={() => setErrorMessage('')}
@@ -102,8 +104,10 @@ const AdminOrdersPage = () => {
         </Alert>
       )}
 
+      {/* Table container */}
       <TableContainer component={Paper} sx={{ mt: 2 }}>
         <Table aria-label="Orders Table">
+          {/* Table header */}
           <TableHead>
             <TableRow sx={{ backgroundColor: 'secondary.main' }}>
               {/* Table header cells */}
@@ -127,6 +131,7 @@ const AdminOrdersPage = () => {
               </StyledTableCell>
             </TableRow>
           </TableHead>
+          {/* Table body */}
           <TableBody>
             {items.length > 0 &&
               items.map((order, index) => {

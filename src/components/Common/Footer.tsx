@@ -1,7 +1,9 @@
 import { Box, Container, Grid, Typography } from '@mui/material';
 
+// Footer component
 const Footer = () => {
   return (
+    // Footer container
     <Box
       sx={{
         backgroundColor: 'primary.main',
@@ -12,6 +14,7 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Grid container spacing={3}>
+          {/* Company section */}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom>
               Company
@@ -26,6 +29,8 @@ const Footer = () => {
               Careers
             </Typography>
           </Grid>
+
+          {/* Products section */}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom>
               Products
@@ -40,6 +45,8 @@ const Footer = () => {
               FAQs
             </Typography>
           </Grid>
+
+          {/* Resources section */}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom>
               Resources
@@ -54,6 +61,8 @@ const Footer = () => {
               Support
             </Typography>
           </Grid>
+
+          {/* Social section */}
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom>
               Social

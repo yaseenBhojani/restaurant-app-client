@@ -3,6 +3,7 @@ import { LoginUserProp, SignUpUserProp } from '../types/interfaces';
 
 const BASE_URL = 'https://restaurant-app-server.up.railway.app/';
 
+// Function to create a new user
 export const createUser = async (user: SignUpUserProp) => {
   try {
     const response = await axios.post(`${BASE_URL}user`, user);
@@ -16,6 +17,7 @@ export const createUser = async (user: SignUpUserProp) => {
   }
 };
 
+// Function to log in a user
 export const loginUser = async (user: LoginUserProp) => {
   try {
     const response = await axios.post(`${BASE_URL}auth`, user);
@@ -29,6 +31,7 @@ export const loginUser = async (user: LoginUserProp) => {
   }
 };
 
+// Function to check if the user is authenticated
 export const isAuthUser = async () => {
   try {
     const response = await axios.get(`${BASE_URL}auth`, {

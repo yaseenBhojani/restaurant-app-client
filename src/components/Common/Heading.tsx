@@ -3,16 +3,18 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { IHeading } from '../../types/interfaces';
 
+// Heading component
 const Heading = ({ children, level, imageUrl }: IHeading) => {
   const levels = ['50vh', '30vh', '20vh', '10vh'];
 
   return (
+    // Container for the heading
     <Box
       sx={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: levels.at(level - 1),
+        height: levels[level - 1], // Use index to access the correct level from the levels array
         backgroundImage: `url(${imageUrl})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',

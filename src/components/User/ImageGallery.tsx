@@ -10,15 +10,18 @@ const ImageGallery = () => {
       setWidth(window.innerWidth);
     };
 
+    // Event listener for window resize
     window.addEventListener('resize', handleResize);
 
     return () => {
+      // Clean up the event listener on component unmount
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   return (
     <ImageList
+      // Styling for the image list
       sx={{
         width: 500,
         height: 335,
@@ -41,9 +44,11 @@ const ImageGallery = () => {
           width: 300,
         },
       }}
+      // Number of columns based on the width
       cols={width > 415 ? 3 : 2}
       rowHeight={164}
     >
+      {/* Map over itemData array to render ImageListItem components */}
       {itemData.map(item => (
         <ImageListItem key={item.img} sx={{}}>
           <img
@@ -60,6 +65,7 @@ const ImageGallery = () => {
 
 export default ImageGallery;
 
+// Array of image data
 const itemData = [
   {
     img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836',

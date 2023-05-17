@@ -3,6 +3,7 @@ import { ChangeOrderStatus, Order } from '../types/interfaces';
 
 const BASE_URL = 'https://restaurant-app-server.up.railway.app/';
 
+// Function to create a new order
 export const createOrderHandler = async (checkoutData: Order) => {
   try {
     const response = await axios.post(`${BASE_URL}order`, checkoutData, {
@@ -21,6 +22,7 @@ export const createOrderHandler = async (checkoutData: Order) => {
   }
 };
 
+// Function to get orders for the current user
 export const getOrdersHandler = async () => {
   try {
     const response = await axios.get(`${BASE_URL}order/user/email`, {
@@ -39,6 +41,7 @@ export const getOrdersHandler = async () => {
   }
 };
 
+// Function to get all orders
 export const getAllOrdersHandler = async () => {
   try {
     const response = await axios.get(`${BASE_URL}order`, {
@@ -57,6 +60,7 @@ export const getAllOrdersHandler = async () => {
   }
 };
 
+// Function to change the status of an order
 export const changeOrderStatusHandler = async ({
   id,
   status,

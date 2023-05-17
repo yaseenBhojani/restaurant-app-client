@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Checkbox from '@mui/material/Checkbox';
@@ -16,41 +16,44 @@ import {
   setSaveAddress,
 } from '../../../store/reducers/checkoutReducer';
 
+// AddressForm component
 const AddressForm = () => {
   const dispatch = useDispatch();
 
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Event handlers for input changes
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setEmail(event.target.value));
   };
 
-  const handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setAddress(event.target.value));
   };
 
-  const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCityChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setCity(event.target.value));
   };
 
-  const handleZipChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleZipChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setZip(event.target.value));
   };
 
-  const handleCountryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCountryChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setCountry(event.target.value));
   };
 
-  const handleSaveAddressChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleSaveAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch(setSaveAddress(event.target.checked));
   };
 
   return (
     <React.Fragment>
+      {/* Shipping address heading */}
       <Typography variant="h6" gutterBottom>
         Shipping address
       </Typography>
+
       <Grid container spacing={3}>
+        {/* Email input */}
         <Grid item xs={12}>
           <TextField
             required
@@ -63,6 +66,8 @@ const AddressForm = () => {
             onChange={handleEmailChange}
           />
         </Grid>
+
+        {/* Address input */}
         <Grid item xs={12}>
           <TextField
             required
@@ -75,6 +80,8 @@ const AddressForm = () => {
             onChange={handleAddressChange}
           />
         </Grid>
+
+        {/* City input */}
         <Grid item xs={12}>
           <TextField
             required
@@ -88,6 +95,7 @@ const AddressForm = () => {
           />
         </Grid>
 
+        {/* Zip/Postal code input */}
         <Grid item xs={12} sm={6}>
           <TextField
             required
@@ -100,6 +108,8 @@ const AddressForm = () => {
             onChange={handleZipChange}
           />
         </Grid>
+
+        {/* Country input */}
         <Grid item xs={12} sm={6}>
           <TextField
             required
@@ -112,6 +122,8 @@ const AddressForm = () => {
             onChange={handleCountryChange}
           />
         </Grid>
+
+        {/* Save address checkbox */}
         <Grid item xs={12}>
           <FormControlLabel
             control={

@@ -1,34 +1,24 @@
-import { useState } from 'react';
-
-// MUI components and styles
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { LoadingButton } from '@mui/lab';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Snackbar from '@mui/material/Snackbar';
 import TextField from '@mui/material/TextField';
 import styled from '@mui/material/styles/styled';
-import { LoadingButton } from '@mui/lab';
 import AddCircleOutlineRounded from '@mui/icons-material/AddCircleOutlineRounded';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 
-// React router
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-
-// Redux
-import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { updateFood } from '../../store/reducers/foodReducer';
-
-// Utils
 import deleteImage from '../../utils/deleteImage';
 import storeImage from '../../utils/storeImage';
-
-// Types
 import { FoodItem } from '../../types/interfaces';
 
-// Heading Component
 import Heading from '../../components/Common/Heading';
 
 const StyledForm = styled('form')({
@@ -82,22 +72,15 @@ const AddIcon = styled(AddCircleOutlineRounded)({
 });
 
 const UpdateFoodPage = () => {
-  // Get id param from URL
-  const { id } = useParams();
+  const { id } = useParams(); // Get id param from URL
+  const navigate = useNavigate(); // Navigate function
+  const dispatch = useDispatch<AppDispatch>(); // Redux dispatch function
+  const { foods } = useSelector((state: RootState) => state.food); // Redux state
 
-  // Navigate function
-  const navigate = useNavigate();
+  const food = foods.find((food: FoodItem) => food._id === id); // Get food item with matching id from redux store
 
-  // Redux hooks
-  const dispatch = useDispatch<AppDispatch>();
-  const { foods } = useSelector((state: RootState) => state.food);
-
-  // Get food item with matching id from redux store
-  const food = foods.find((food: FoodItem) => food._id === id);
-
-  // State hooks
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false); // Snackbar state
 
   // State hooks for form inputs
   const [name, setName] = useState(food?.name);
@@ -108,26 +91,24 @@ const UpdateFoodPage = () => {
   const [imageUrl, setImageUrl] = useState(food?.image);
 
   // Handlers for form input changes
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
-  const handleDescriptionChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleDescriptionChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDescription(event.target.value);
   };
 
-  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePriceChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPrice(parseFloat(event.target.value));
   };
 
-  const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCategory(event.target.value);
   };
 
   // Handler for image input change
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setImage(event.target.files[0]);
       setImageUrl(URL.createObjectURL(event.target.files[0]));
@@ -145,12 +126,13 @@ const UpdateFoodPage = () => {
   };
 
   // Handler for form submission
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!name || !description || !price || !category || !id || !food) {
       return;
     }
+
     setIsLoading(true);
 
     try {

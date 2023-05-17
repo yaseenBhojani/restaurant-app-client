@@ -3,6 +3,7 @@ import { FoodItem } from '../types/interfaces';
 
 const BASE_URL = 'https://restaurant-app-server.up.railway.app/';
 
+// Function to create a food item
 export const createFood = async (food: FoodItem) => {
   try {
     const response = await axios.post(`${BASE_URL}food`, food, {
@@ -21,6 +22,7 @@ export const createFood = async (food: FoodItem) => {
   }
 };
 
+// Function to get all food items
 export const getFoods = async () => {
   try {
     const response = await axios.get(`${BASE_URL}food`);
@@ -34,6 +36,7 @@ export const getFoods = async () => {
   }
 };
 
+// Function to delete a food item by ID
 export const deleteFood = async (id: string) => {
   try {
     const response = await axios.delete(`${BASE_URL}food/${id}`, {
@@ -52,6 +55,7 @@ export const deleteFood = async (id: string) => {
   }
 };
 
+// Function to update a food item by ID
 export const updateFood = async (id: string, foodItem: FoodItem) => {
   try {
     const response = await axios.patch(`${BASE_URL}food/${id}`, foodItem, {

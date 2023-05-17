@@ -1,5 +1,5 @@
+// Import statements
 import { useDispatch, useSelector } from 'react-redux';
-
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -7,13 +7,12 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-
 import { AddShoppingCart, Delete } from '@mui/icons-material';
-
 import { AppDispatch, RootState } from '../../store';
 import { FoodItem } from '../../types/interfaces';
 import { addItem, removeItem } from '../../store/reducers/cartReducer';
 
+// Styled components
 const FoodCardWrapper = styled(Card)({
   width: 345,
   margin: '0 auto',
@@ -70,6 +69,7 @@ const RemoveFromCartButton = styled(IconButton)({
   },
 });
 
+// FoodCard component
 const FoodCard = ({
   _id,
   name,

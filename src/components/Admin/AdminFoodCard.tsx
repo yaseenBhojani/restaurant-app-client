@@ -1,17 +1,17 @@
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { FoodItem } from '../../types/interfaces';
-import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { setDeleteItem } from '../../store/reducers/adminFoodItemReducer';
-import { useNavigate } from 'react-router-dom';
 
 const AdminFoodCard = ({
   _id,
@@ -23,6 +23,7 @@ const AdminFoodCard = ({
 }: FoodItem) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [hovered, setHovered] = useState(false);
 
   const handleUpdate = () => {
     navigate(`/admin/update-food/${_id}`);
@@ -33,17 +34,26 @@ const AdminFoodCard = ({
     dispatch(setDeleteItem(_id!));
   };
 
+  const handleMouseEnter = () => {
+    setHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHovered(false);
+  };
+
   return (
     <Card
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       sx={{
         width: 345,
         backgroundColor: 'white',
         borderRadius: 2,
-        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+        boxShadow: hovered
+          ? '0px 8px 8px rgba(0, 0, 0, 0.3)'
+          : '0px 4px 4px rgba(0, 0, 0, 0.25)',
         transition: 'box-shadow 0.3s ease-in-out',
-        '&:hover': {
-          boxShadow: '0px 8px 8px rgba(0, 0, 0, 0.3)',
-        },
       }}
     >
       <CardMedia
