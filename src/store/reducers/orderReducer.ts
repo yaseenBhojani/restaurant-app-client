@@ -1,21 +1,21 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ChangeOrderStatus, OrderState } from '../../types/interfaces';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ChangeOrderStatus, OrderState } from "../../types/interfaces";
 import {
   getAllOrdersHandler,
   getOrdersHandler,
   changeOrderStatusHandler,
-} from '../../api/orderApi';
+} from "../../api/orderApi";
 
 // Async thunks for retrieving orders and changing order status
-export const getOrders = createAsyncThunk('get/orders', getOrdersHandler);
+export const getOrders = createAsyncThunk("get/orders", getOrdersHandler);
 
 export const getAllOrders = createAsyncThunk(
-  'get/allOrders',
+  "get/allOrders",
   getAllOrdersHandler
 );
 
 export const changeOrderStatus = createAsyncThunk(
-  'patch/changeStatus',
+  "patch/changeStatus",
   async ({ id, status }: ChangeOrderStatus) => {
     const response = await changeOrderStatusHandler({ id, status });
     return response;
@@ -30,49 +30,49 @@ const initialState: OrderState = {
 
 // Create the orderSlice using createSlice from Redux Toolkit
 export const orderSlice = createSlice({
-  name: 'order',
+  name: "order",
   initialState,
   reducers: {},
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
       // Get Orders
-      .addCase(getOrders.pending, state => {
+      .addCase(getOrders.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getOrders.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.items = action.payload;
+        state.items = action.payload.orders;
         console.log(action.payload);
       })
-      .addCase(getOrders.rejected, state => {
+      .addCase(getOrders.rejected, (state) => {
         state.isLoading = false;
       })
       // Get All Orders
-      .addCase(getAllOrders.pending, state => {
+      .addCase(getAllOrders.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getAllOrders.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.items = action.payload;
+        state.items = action.payload.orders;
         console.log(action.payload);
       })
-      .addCase(getAllOrders.rejected, state => {
+      .addCase(getAllOrders.rejected, (state) => {
         state.isLoading = false;
       })
       // Change Order Status
-      .addCase(changeOrderStatus.pending, state => {
+      .addCase(changeOrderStatus.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(changeOrderStatus.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.items = state.items.map(item => {
+        state.items = state.items.map((item) => {
           if (item._id === action.payload.id) {
             return action.payload;
           }
           return item;
         });
       })
-      .addCase(changeOrderStatus.rejected, state => {
+      .addCase(changeOrderStatus.rejected, (state) => {
         state.isLoading = false;
       });
   },
