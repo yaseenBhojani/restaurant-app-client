@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ChangeOrderStatus, Order } from '../types/interfaces';
 
-const BASE_URL = 'https://restaurant-app-server.up.railway.app/';
+const BASE_URL = 'https://restaurant-app-server-chi.vercel.app/';
 
 // Function to create a new order
 export const createOrderHandler = async (checkoutData: Order) => {

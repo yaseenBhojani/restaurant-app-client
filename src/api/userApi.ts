@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { LoginUserProp, SignUpUserProp } from '../types/interfaces';
+import axios from "axios";
+import { LoginUserProp, SignUpUserProp } from "../types/interfaces";
 
-const BASE_URL = 'https://restaurant-app-server.up.railway.app/';
+const BASE_URL = "https://restaurant-app-server-chi.vercel.app/";
 
 // Function to create a new user
 export const createUser = async (user: SignUpUserProp) => {
@@ -11,8 +11,8 @@ export const createUser = async (user: SignUpUserProp) => {
   } catch (error: unknown) {
     throw new Error(
       axios.isAxiosError(error)
-        ? error.response?.data?.message ?? 'An error occurred'
-        : 'An error occurred'
+        ? error.response?.data?.message ?? "An error occurred"
+        : "An error occurred"
     );
   }
 };
@@ -25,8 +25,8 @@ export const loginUser = async (user: LoginUserProp) => {
   } catch (error: unknown) {
     throw new Error(
       axios.isAxiosError(error)
-        ? error.response?.data?.message ?? 'An error occurred'
-        : 'An error occurred'
+        ? error.response?.data?.message ?? "An error occurred"
+        : "An error occurred"
     );
   }
 };
@@ -36,16 +36,16 @@ export const isAuthUser = async () => {
   try {
     const response = await axios.get(`${BASE_URL}auth`, {
       headers: {
-        authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        'x-refresh-token': localStorage.getItem('refreshToken'),
+        authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        "x-refresh-token": localStorage.getItem("refreshToken"),
       },
     });
     return response.data;
   } catch (error: unknown) {
     throw new Error(
       axios.isAxiosError(error)
-        ? error.response?.data?.message ?? 'An error occurred'
-        : 'An error occurred'
+        ? error.response?.data?.message ?? "An error occurred"
+        : "An error occurred"
     );
   }
 };
